@@ -1592,9 +1592,10 @@ pre code {
   width: 100%;
 }
 .with-love {
-  color: #f00;
+  color: #6c6c6c;
   display: inline-block;
   margin: 0 5px;
+  animation: icon-animate 1.33s ease-in-out infinite;
 }
 @-moz-keyframes icon-animate {
   0%, 100% {
