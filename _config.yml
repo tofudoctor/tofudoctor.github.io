@@ -1,11 +1,11 @@
 # Hexo Configuration
 ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
-
+encoding='utf-8'
 # Site
 title: tofudoctor的筆記
 subtitle: ''
-description: 
+description: 夢敢做更要敢當，這些筆記，獻給當初徬徨迷惘的我，也獻給在這條路上努力的你們
 keywords:
 author: tofudoctor
 language: zh-TW
