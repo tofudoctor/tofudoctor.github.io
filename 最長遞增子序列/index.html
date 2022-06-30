@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tofudoctor.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最長遞增子序列(Longest Increasing Subsequence) 一個序列的子序列是指在不破壞原始序列順序的情況下取出的任意長度的序列，假設有一個字串$s&#x3D;zxcvbnm$，而$xcvb$、$zxcvbnm$、$z$、$zcnm$之類的都是$s$的子序列。這題的題目是給$a_1,a_2,…,a_n$，求出$a_l,…,a_r$，其中$a_l$~$a_r$是遞增的，也就是說求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最長遞增子序列">
+<meta property="og:url" content="https://tofudoctor.github.io/%E6%9C%80%E9%95%B7%E9%81%9E%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/index.html">
+<meta property="og:site_name" content="tofudoctor的筆記">
+<meta property="og:description" content="最長遞增子序列(Longest Increasing Subsequence) 一個序列的子序列是指在不破壞原始序列順序的情況下取出的任意長度的序列，假設有一個字串$s&#x3D;zxcvbnm$，而$xcvb$、$zxcvbnm$、$z$、$zcnm$之類的都是$s$的子序列。這題的題目是給$a_1,a_2,…,a_n$，求出$a_l,…,a_r$，其中$a_l$~$a_r$是遞增的，也就是說求">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-06-30T16:20:41.000Z">
+<meta property="article:modified_time" content="2022-06-30T16:36:50.532Z">
+<meta property="article:author" content="tofudoctor">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tofudoctor.github.io/%E6%9C%80%E9%95%B7%E9%81%9E%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://tofudoctor.github.io/%E6%9C%80%E9%95%B7%E9%81%9E%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/","path":"最長遞增子序列/","title":"最長遞增子序列"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>最長遞增子序列 | tofudoctor的筆記</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tofudoctor的筆記</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E9%95%B7%E9%81%9E%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97-Longest-Increasing-Subsequence"><span class="nav-number">1.</span> <span class="nav-text">最長遞增子序列(Longest Increasing Subsequence)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83"><span class="nav-number">1.1.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E7%90%86-amp-%E5%88%97%E8%BD%89%E7%A7%BB%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">整理&amp;列轉移式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E4%BE%8B%E5%AD%90"><span class="nav-number">1.3.</span> <span class="nav-text">實際例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">優化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E7%90%86"><span class="nav-number">1.4.1.</span> <span class="nav-text">整理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E4%BE%8B%E5%AD%90-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">實際例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF"><span class="nav-number">1.4.3.</span> <span class="nav-text">回溯</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C"><span class="nav-number">1.5.</span> <span class="nav-text">實作</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tofudoctor</p>
+  <div class="site-description" itemprop="description">夢敢做更要敢當，這些筆記，獻給當初徬徨迷惘的我，也獻給在這條路上努力的你們</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://tofudoctor.github.io/%E6%9C%80%E9%95%B7%E9%81%9E%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tofudoctor">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tofudoctor的筆記">
+      <meta itemprop="description" content="夢敢做更要敢當，這些筆記，獻給當初徬徨迷惘的我，也獻給在這條路上努力的你們">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="最長遞增子序列 | tofudoctor的筆記">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最長遞增子序列
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2022-07-01 00:20:41 / 修改時間：00:36:50" itemprop="dateCreated datePublished" datetime="2022-07-01T00:20:41+08:00">2022-07-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AB%B6%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">競程</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AB%B6%E7%A8%8B/DP/" itemprop="url" rel="index"><span itemprop="name">DP</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AB%B6%E7%A8%8B/Greedy/" itemprop="url" rel="index"><span itemprop="name">Greedy</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AB%B6%E7%A8%8B/%E4%BA%8C%E5%88%86%E6%90%9C/" itemprop="url" rel="index"><span itemprop="name">二分搜</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="最長遞增子序列-Longest-Increasing-Subsequence"><a href="#最長遞增子序列-Longest-Increasing-Subsequence" class="headerlink" title="最長遞增子序列(Longest Increasing Subsequence)"></a>最長遞增子序列(Longest Increasing Subsequence)</h1><blockquote>
+<h5 id="一個序列的子序列是指在不破壞原始序列順序的情況下取出的任意長度的序列，假設有一個字串-s-x3D-zxcvbnm-，而-xcvb-、-zxcvbnm-、-z-、-zcnm-之類的都是-s-的子序列。"><a href="#一個序列的子序列是指在不破壞原始序列順序的情況下取出的任意長度的序列，假設有一個字串-s-x3D-zxcvbnm-，而-xcvb-、-zxcvbnm-、-z-、-zcnm-之類的都是-s-的子序列。" class="headerlink" title="一個序列的子序列是指在不破壞原始序列順序的情況下取出的任意長度的序列，假設有一個字串$s&#x3D;zxcvbnm$，而$xcvb$、$zxcvbnm$、$z$、$zcnm$之類的都是$s$的子序列。"></a>一個序列的子序列是指在不破壞原始序列順序的情況下取出的任意長度的序列，假設有一個字串$s&#x3D;zxcvbnm$，而$xcvb$、$zxcvbnm$、$z$、$zcnm$之類的都是$s$的子序列。</h5><h5 id="這題的題目是給-a-1-a-2-…-a-n-，求出-a-l-…-a-r-，其中-a-l-a-r-是遞增的，也就是說求出題目的最長遞增子序列-LIS"><a href="#這題的題目是給-a-1-a-2-…-a-n-，求出-a-l-…-a-r-，其中-a-l-a-r-是遞增的，也就是說求出題目的最長遞增子序列-LIS" class="headerlink" title="這題的題目是給$a_1,a_2,…,a_n$，求出$a_l,…,a_r$，其中$a_l$~$a_r$是遞增的，也就是說求出題目的最長遞增子序列($LIS$)"></a>這題的題目是給$a_1,a_2,…,a_n$，求出$a_l,…,a_r$，其中$a_l$~$a_r$是遞增的，也就是說求出題目的最長遞增子序列($LIS$)</h5></blockquote>
+<span id="more"></span>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>我們先定義$dp[i]$為<strong>以$a[i]$為結尾的$LIS$長度</strong>，然後設定初始值$dp[1]&#x3D;1$，因為$a_1$一定只能形成長度為$1$的$LIS$。</p>
+<p>接著，分析一下甚麼時候可以把$a[i]$加進$LIS$，條件就是要比原本$LIS$的結尾大，但$dp[i]$會是多少呢?我們可以發現，符合上述條件的值不一定只有一個，因此，我們需要把$a[i]$前面的值都檢查一遍，找出$LIS$長度最大的那個再加一就會是當前的$dp[i]$。</p>
+<p>最後，因為我們$dp[i]$的定義是以$a[i]$為結尾的$LIS$長度，因此不保證最後一個一定就是最大的，所以我們需要把$dp[1]$~$dp[n]$都檢查一遍，最大的就是我們的答案。</p>
+<h2 id="整理-amp-列轉移式"><a href="#整理-amp-列轉移式" class="headerlink" title="整理&amp;列轉移式"></a>整理&amp;列轉移式</h2><ul>
+<li>$dp[i]$為<strong>以$a[i]$為結尾的$LIS$長度</strong></li>
+<li>$dp[1]&#x3D;1$</li>
+<li>把$a[i]$前面$&lt;a[i]$的值都檢查一遍，找出$LIS$長度最大的那個再加一就會是當前的$dp[i]$</li>
+<li>做完記得把$dp[1]$~$dp[n]$都檢查一遍，最大的才是我們的答案</li>
+</ul>
+<p><strong>轉移式:</strong><br>$$ dp[i]&#x3D;max(dp[j]+1)_{j&lt;i\ \&amp;\ a[j]&lt;a[i]} $$</p>
+<p>狀態數$O(n)$, 轉移複雜度$O(n)$, 總複雜度為$O(n^2)$</p>
+<h2 id="實際例子"><a href="#實際例子" class="headerlink" title="實際例子"></a>實際例子</h2><p>假設$a[\ ]&#x3D;1,5,3,7,4$<br><strong>Step1</strong>: 設初始值</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center"><font color=#FF0000>1</font></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p><strong>Step2</strong>: 填表格<br>找出$dp[1]$~$dp[1]$之中最大且$a[j]&lt;5(a[2])$的，取$1(dp[1])+1$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center"><font color=#FF0000>2</font></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>找出$dp[1]$~$dp[2]$之中最大且$a[j]&lt;3(a[3])$的，取$1(dp[2])+1$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center"><font color=#FF0000>2</font></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>找出$dp[1]$~$dp[3]$之中最大且$a[j]&lt;7(a[4])$的，取$2(dp[2])+1$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center"><font color=#FF0000>3</font></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>找出$dp[1]$~$dp[4]$之中最大且$a[j]&lt;4(a[5])$的，取$2(dp[3])+1$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center"><font color=#FF0000>3</font></td>
+</tr>
+</tbody></table>
+<p><strong>Step3</strong>: 這題的答案跟其他$dp$稍微不一樣，要找出$dp[1],…,dp[n]$中最大的才是答案，因為我們$dp[i]$的定義是以$i$為結尾的$LIS$，他不一定會最長，因此我們需要把$dp[\ ]$的結果跑一遍找出最大值，這個例子的答案是$3$。</p>
+<h2 id="優化"><a href="#優化" class="headerlink" title="優化"></a>優化</h2><p>不過仔細想想，好像有些東西用不到?假設我們正在找$dp[i]$，當$a[j]$比$a[i]$小而且$LIS$還比$a[i]$的大時，$dp[i]$可以說是不可能會被取用，因為能接在$a[i]$後面的一定能接在$a[j]$後面，而$a[j]$的效果還會比$a[i]$好，也就是說在相同長度的情況下$a[i]$越小被放進$LIS$的機會就越大。</p>
+<p>像是$5$被放進$LIS$的機會比$4$小，因為$5&gt;4$且$2&lt;3$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center"><font color=#FF0000>2</font></td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center"><font color=#FF0000>3</font></td>
+</tr>
+</tbody></table>
+<p>因此，我們的$dp[i]$有了新的定義，就是<strong>長度為$i$時的最小結尾</strong>，而我們要做的就是找出$a[i]$有沒有比$dp[\ ]$內的值小，如果有就代表$a[i]$成為$LIS$的潛力比原本的值還大，那我們就找出$dp[\ ]$中$&gt;&#x3D;a[i]$的第一個數替換成$a[i]$，如果沒有，代表$a[i]$可以接在當前的$LIS$後面，直接把$a[i]$加到$dp[\ ]$的最後面就好了，而$LIS$的長度非常簡單，看定義就知道，$dp[\ ]$長度多少答案就是多少。</p>
+<h3 id="整理"><a href="#整理" class="headerlink" title="整理"></a>整理</h3><ul>
+<li>$dp[i]$是<strong>長度為$i$時的最小結尾</strong></li>
+<li>如果$a[i]&gt;dp[\ ]$中所有的值，加進$dp[\ ]$的結尾</li>
+<li>否則，找出$dp[\ ]$中第一個$&gt;&#x3D;a[i]$的數替換成$a[i]$</li>
+<li><font color=#FF0000>可以用二分搜加速</font>，原因底下說明</li>
+<li>$LIS$的長度$&#x3D;dp[\ ]$長度</li>
+</ul>
+<h3 id="實際例子-1"><a href="#實際例子-1" class="headerlink" title="實際例子"></a>實際例子</h3><p>找不到比$&gt;&#x3D;1$的，直接加入$1$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center"><font color=#FF0000>1</font></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>找不到比$&gt;&#x3D;5$的，直接加入$5$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center"><font color=#FF0000>5</font></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>第一個$&gt;&#x3D;3$的數是$5$，將其替換成$3$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center"><font color=#FF0000>3</font></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>找不到比$&gt;&#x3D;7$的，直接加入$7$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center"><font color=#FF0000>7</font></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>第一個$&gt;&#x3D;2$的數是$3$，將其替換成$2$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center"><font color=#FF0000>2</font></td>
+<td align="center">7</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>最後$dp[\ ]$的長度是$3$，因此本題答案為$3$。而可以用二分搜的原因是因為$dp[\ ]$的值都是遞增的，因此可以用二分搜加速，加速後的時間複雜度為$O(n\log n)$</p>
+<h3 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h3><p>如果我們想要得到$LIS$的內容要怎麼做?輸出剛剛的$dp[\ ]$就可以了嗎?答案是不行，看看剛才的結果</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">7</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>$127$並不是$LIS$，$2$被放過去的原因是因為它成為$LIS$的潛力比原本的$3$還大，但是我們可以另外用一個陣列($pos[\ ]$)存每一個$a[i]$的最佳位置，最後挑出我們要的數字就能找到$LIS$了，接下來示範如何找到最後一個$LIS$(索引和最大的)</p>
+<p>$1$的最佳位置是$1$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">$pos[\ ]$</td>
+<td align="center"><font color=#FF0000>1</font></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>$5$的最佳位置是$2$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">$pos[\ ]$</td>
+<td align="center">1</td>
+<td align="center"><font color=#FF0000>2</font></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>$3$的最佳位置是$2$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">$pos[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center"><font color=#FF0000>2</font></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>$7$的最佳位置是$3$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">7</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">$pos[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center"><font color=#FF0000>3</font></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>$2$的最佳位置是$2$</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">7</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">$pos[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center"><font color=#FF0000>2</font></td>
+</tr>
+</tbody></table>
+<p>從前面的$dp[\ ]$我們知道$LIS$長度為$3$，因此，我們從後面開始找，找到$3$之後開始往前挑出我們要的$a[i]$就是答案了，這個例子的答案是$137$。</p>
+<table>
+<thead>
+<tr>
+<th align="center">$a[\ ]$</th>
+<th align="center">1</th>
+<th align="center">5</th>
+<th align="center">3</th>
+<th align="center">7</th>
+<th align="center">2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$dp[\ ]$</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">7</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">$pos[\ ]$</td>
+<td align="center"><font color=#FF0000>1</font></td>
+<td align="center">2</td>
+<td align="center"><font color=#FF0000>2</font></td>
+<td align="center"><font color=#FF0000>3</font></td>
+<td align="center">2</td>
+</tr>
+</tbody></table>
+<h2 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h2><details>
+  <summary>zj d242 O(nlogn)</summary>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long int</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> oo 1000000005</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="number">0</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; a;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; pos;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; dp;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; ans;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="keyword">while</span>(cin&gt;&gt;n)&#123;</span><br><span class="line">        a.<span class="built_in">push_back</span>(n);</span><br><span class="line">        pos.<span class="built_in">push_back</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> l = a.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; l;i++)&#123;</span><br><span class="line">        <span class="keyword">auto</span> t = <span class="built_in">lower_bound</span>(dp.<span class="built_in">begin</span>(), dp.<span class="built_in">end</span>(), a[i]);</span><br><span class="line">        <span class="comment">//vector&lt;int&gt;::iterator t = upper_bound(dp.begin(), dp.end(), a[i]);</span></span><br><span class="line">        <span class="keyword">if</span>(t == dp.<span class="built_in">end</span>())&#123;</span><br><span class="line">            dp.<span class="built_in">push_back</span>(a[i]);</span><br><span class="line">            pos[i] = dp.<span class="built_in">size</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            dp[t - dp.<span class="built_in">begin</span>()] = a[i];</span><br><span class="line">            pos[i] = t - dp.<span class="built_in">begin</span>()+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> cur_pos = dp.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = pos.<span class="built_in">size</span>()<span class="number">-1</span>; i &gt;= <span class="number">0</span>;i--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(pos[i] == cur_pos)&#123;</span><br><span class="line">            ans.<span class="built_in">push_back</span>(a[i]);</span><br><span class="line">            cur_pos--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; dp.<span class="built_in">size</span>() &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;-\n&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = dp.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>;i--)&#123;</span><br><span class="line">        cout &lt;&lt; ans[i] &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+題目
+
+<p><a target="_blank" rel="noopener" href="https://zerojudge.tw/ShowProblem?problemid=d242">zj d242</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E6%9C%80%E9%95%B7%E5%85%B1%E5%90%8C%E5%AD%90%E5%BA%8F%E5%88%97/" rel="prev" title="最長共同子序列">
+                  <i class="fa fa-chevron-left"></i> 最長共同子序列
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tofudoctor</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
