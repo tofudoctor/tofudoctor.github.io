@@ -1,0 +1,29 @@
+/* 第一種:改背景顏色 */
+body{
+    background-color: antiquewhite;
+}
+
+/* 第二種:改按鈕背景色和字的顏色 */
+.button {
+    background-color: cornflowerblue;
+    color: black;
+}
+
+/* 第三種:滑鼠碰到按鈕會改字跟按鈕背景色 */
+.button:hover {
+    background-color: slateblue;
+    color: white;
+}
+
+/* 第四種:改結果(random出來的那個)的字體和顏色*/
+.result {
+    font-family: Georgia;
+    color: gray;
+}
+
+/* 第五種:改水平線的顏色高度和字離他的距離 */
+hr{
+    height: 3px;
+    background-color: gray;
+    margin: 20px;
+}
